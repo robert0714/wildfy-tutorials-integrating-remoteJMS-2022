@@ -183,3 +183,5 @@
             </resource-adapters>
         </subsystem> 
       ```
+#  Bootable Wildfly with a Basic MDB via RAR to an external AMQ 
+[reference](./demo-mdb-rar/README.md)

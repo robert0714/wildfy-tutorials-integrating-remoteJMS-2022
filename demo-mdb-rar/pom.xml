@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.wildfly.plugins</groupId>
+    <artifactId>demo-mdb</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
+    <name>WildFly Bootable Jar - MDB and RAR deployment</name>
+    <description>This project demonstrates how to package an MDB and a RAR.</description>
+    <properties>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>		
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<version.compiler.plugin>3.8.1</version.compiler.plugin>
+		<version.surefire.plugin>2.22.2</version.surefire.plugin>
+		<version.failsafe.plugin>2.22.2</version.failsafe.plugin>
+		<endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
+
+        <!-- <version.wildfly.maven.plugin>7.0.2.Final</version.wildfly.maven.plugin> -->
+
+        <!-- Define the version of the JBoss BOMs we want to import to specify tested stacks. -->
+        <version.jboss.bom>26.1.0.Final</version.jboss.bom>
+        <version.wildfly>26.1.0.Final</version.wildfly>
+        <wildfly.groupId>org.wildfly</wildfly.groupId>
+        <jakartaee-api.version>8.0.0</jakartaee-api.version>
+	</properties>
+    <dependencies>
+        <dependency>
+            <groupId>jakarta.platform</groupId>
+            <artifactId>jakarta.jakartaee-api</artifactId>
+            <version>${jakartaee-api.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.ejb3</groupId>
+            <artifactId>jboss-ejb3-ext-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+    <build>
+        <finalName>${project.artifactId}</finalName>
+        <plugins>
+            <plugin>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <configuration>
+                    <transitive>false</transitive>
+                    <artifactItems>
+                        <artifactItem>
+                            <groupId>org.apache.activemq</groupId>
+                            <artifactId>activemq-rar</artifactId>
+                            <version>5.16.5</version>
+                            <type>rar</type>
+                            <overWrite>true</overWrite>
+                            <outputDirectory>${project.build.directory}/</outputDirectory>
+                            <destFileName>activemq-rar-5.16.5.rar</destFileName>
+                        </artifactItem>
+                    </artifactItems>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.wildfly.plugins</groupId>
+                <artifactId>wildfly-jar-maven-plugin</artifactId>
+                <configuration>
+                    <feature-pack-location>wildfly@maven(org.jboss.universe:community-universe)#${version.wildfly}</feature-pack-location>
+                    <layers>
+                        <layer>resource-adapters</layer>
+                        <layer>ejb</layer>
+                    </layers>
+                    <cli-sessions>
+                        <cli-session>
+                            <script-files>
+                                <script>src/main/resources/maven-deploy-amq-rar.cli</script>
+                            </script-files>
+                        </cli-session>
+                    </cli-sessions>
+                    <hollow-jar>true</hollow-jar>
+                    <plugin-options>
+                    </plugin-options>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>package</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+    <dependencyManagement>
+        <dependencies> 
+            <dependency>
+                <groupId>org.wildfly.bom</groupId>
+                <artifactId>wildfly-jakartaee8-with-tools</artifactId>
+                <version>${version.jboss.bom}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>            
+        </dependencies>
+    </dependencyManagement>
+</project>
