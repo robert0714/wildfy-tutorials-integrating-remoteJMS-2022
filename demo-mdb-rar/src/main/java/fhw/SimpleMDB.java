@@ -11,6 +11,7 @@ import javax.jms.TextMessage;
     activationConfig =
     {
         @ActivationConfigProperty(propertyName = "destination", propertyValue = "simpleMDBTestQueue"),
+//    	 @ActivationConfigProperty(propertyName = "destinationLookup", propertyValue = "simpleMDBTestQueue"),
         @ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Queue")
 
     })

@@ -5,7 +5,7 @@
     <groupId>org.wildfly.plugins</groupId>
     <artifactId>demo-mdb</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <packaging>jar</packaging>
+    <packaging>war</packaging>
 
     <name>WildFly Bootable Jar - MDB and RAR deployment</name>
     <description>This project demonstrates how to package an MDB and a RAR.</description>
@@ -25,7 +25,9 @@
         <version.wildfly>26.1.0.Final</version.wildfly>
         <wildfly.groupId>org.wildfly</wildfly.groupId>
         <jakartaee-api.version>8.0.0</jakartaee-api.version>
-	</properties>
+        <version.wildfly.maven.plugin>7.0.2.Final</version.wildfly.maven.plugin> 
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>jakarta.platform</groupId>
@@ -42,6 +44,18 @@
     <build>
         <finalName>${project.artifactId}</finalName>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>3.2.2</version>
+                <configuration>
+                    <!-- Jakarta EE doesn't require web.xml, Maven needs to catch up! -->
+                    <failOnMissingWebXml>false</failOnMissingWebXml>
+                    <archive>
+                        <addMavenDescriptor>false</addMavenDescriptor>
+                    </archive>
+                </configuration>
+            </plugin>
             <plugin>
                 <artifactId>maven-dependency-plugin</artifactId>
                 <configuration>
@@ -69,8 +83,13 @@
             <plugin>
                 <groupId>org.wildfly.plugins</groupId>
                 <artifactId>wildfly-jar-maven-plugin</artifactId>
+                <version>${version.wildfly.maven.plugin}</version>
                 <configuration>
-                    <feature-pack-location>wildfly@maven(org.jboss.universe:community-universe)#${version.wildfly}</feature-pack-location>
+					<feature-packs>
+						<feature-pack>
+							<location>wildfly@maven(org.jboss.universe:community-universe)#${version.wildfly}</location>
+						</feature-pack>
+					</feature-packs>                     
                     <layers>
                         <layer>resource-adapters</layer>
                         <layer>ejb</layer>
@@ -82,9 +101,6 @@
                             </script-files>
                         </cli-session>
                     </cli-sessions>
-                    <hollow-jar>true</hollow-jar>
-                    <plugin-options>
-                    </plugin-options>
                 </configuration>
                 <executions>
                     <execution>

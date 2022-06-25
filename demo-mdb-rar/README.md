@@ -2,7 +2,7 @@
 
 Example contributed by Fred Welland.
 
-It was origined From https://github.com/wildfly-extras/wildfly-jar-maven-plugin/tree/main/examples/gradle-mdb-rar . According to https://github.com/wildfly-extras/wildfly-jar-maven-plugin/tree/main/examples/mdb-rar  to mdofiy to adjust our situation.
+It was origined From [official sample code1](https://github.com/wildfly-extras/wildfly-jar-maven-plugin/tree/main/examples/gradle-mdb-rar) . According to  [official sample code2](https://github.com/wildfly-extras/wildfly-jar-maven-plugin/tree/main/examples/mdb-rar)  to mdofiy to adjust our situation.
 
 ## WHY??
 Couple of reasons:
@@ -36,15 +36,20 @@ will build everything; the resulting JAR is directly runnable.   Create or edit 
 
 Running from Command Line is simple; set some environment variables and use java -jar.   Example : 
 
-    ```shell
+```shell
 	 java -jar target/demo-mdb-bootable.jar  --properties src/main/resources/Leopard.dev.properties 
-	```
+```
+	
+```
+mvn wildfly-jar:run      -Damq.broker.userName=admin  -Damq.broker.passWord=admin -Damq.broker.url=tcp://192.168.18.30:61616?jms.rmIdFromConnectionId=true -Djboss.bind.address=0.0.0.0
+```
 	
 or
 
-    ```shell
-	 java -jar target/demo-mdb-bootable.jar   -Damq.broker.userName=admin  -Damq.broker.passWord=admin -Damq.broker.url=tcp://localhost:61616?jms.rmIdFromConnectionId=true -Djboss.bind.address=0.0.0.0
-	```
+```shell
+java -jar target/demo-mdb-bootable.jar   -Damq.broker.userName=admin  -Damq.broker.passWord=admin -Damq.broker.url=tcp://localhost:61616?jms.rmIdFromConnectionId=true -Djboss.bind.address=0.0.0.0
+```
+
 Toss (by default tcp:localhost:localhost:61616) a text message at the targe AMQ queue 'simpleMDBTestQueue' and then check server log output. 
 
 For example:
@@ -52,6 +57,8 @@ For example:
 ```
 activemq producer --destination queue://simpleMDBTestQueue --message Hello --messageCount 1
 ```
+or
+When you invoke `http://127.0.0.1:8080/HelloWorldMDBServletClient`:
 
 ## Notes & Other Interesting Things
 

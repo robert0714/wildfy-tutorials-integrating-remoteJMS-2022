@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.as.quickstarts.servlet;
+package fhw;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.function.Function; 
+import java.util.function.Function;
 import static java.util.logging.Level.SEVERE;
 import static java.util.logging.Logger.getLogger;
 import java.util.logging.Logger;
@@ -31,7 +31,7 @@ import javax.jms.ConnectionFactory;
 import javax.jms.ConnectionMetaData;
 import javax.jms.JMSConnectionFactory;
 import javax.jms.JMSContext;
-import javax.jms.JMSException; 
+import javax.jms.JMSException;
 import javax.jms.JMSProducer;
 import javax.jms.Message;
 import javax.jms.Queue;
@@ -42,7 +42,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
- 
 
 /**
  * <p>
@@ -67,15 +66,15 @@ public class HelloWorldMDBServletClient extends HttpServlet {
     private static final int MSG_COUNT = 5;
 
     @Inject
-    @JMSConnectionFactory("java:/jms/remoteCF")
+    @JMSConnectionFactory("java:/amq/ConnectionFactory")
     private JMSContext context;
     
     private String jmsVersion;
     
-    @Resource(lookup = "java:/jms/remoteCF")
+    @Resource(lookup = "java:/amq/ConnectionFactory")
     private ConnectionFactory cf ; 
 
-    @Resource(lookup = "java:/queue/testQueueRemoteArtemis")
+    @Resource(lookup = "java:/queue/simpleMDBTestQueue")
     private Queue queue;
 
     @PostConstruct
