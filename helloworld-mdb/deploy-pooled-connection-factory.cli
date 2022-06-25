@@ -1,10 +1,3 @@
-# deploy --name=ActiveMQ-RAR --runtime-name=activemq-rar.rar target/activemq-rar-5.16.5.rar
-# https://stackoverflow.com/questions/24921640/how-to-set-up-messaging-subsystem-using-cli-in-wildfly
-# jboss-eap-7.4(wildfly 22.0.1.Final) work[legacy-security] ok /but wildfly(23+) not 
-
-
-
-
 # Add messaging server with default configuration, allow only in-VM connectors  
 /subsystem=messaging-activemq/server=default:add(elytron-domain="ApplicationDomain",security-enabled="false",statistics-enabled="${wildfly.messaging-activemq.statistics-enabled:${wildfly.statistics-enabled:false}}")
 /subsystem=messaging-activemq/server=default/address-setting=#:add(dead-letter-address="jms.queue.DLQ",expiry-address="jms.queue.ExpiryQueue",max-size-bytes="10485760",message-counter-history-day-limit="10",page-size-bytes="2097152")
@@ -35,12 +28,12 @@
 /subsystem=messaging-activemq/server=default/security-setting=#:add()
 /subsystem=messaging-activemq/server=default/security-setting=#/role="guest":add(consume="true",create-non-durable-queue="true",delete-non-durable-queue="true",send="true")
 
- 
 
-
-/socket-binding-group=standard-sockets/remote-destination-outbound-socket-binding=remote-artemis:add(host=127.0.0.1, port=61616)
+# Configure pooled-connection-factory
+/socket-binding-group=standard-sockets/remote-destination-outbound-socket-binding=remote-artemis:add(host=${amq.broker.host}, port=${amq.broker.port})
 /subsystem=messaging-activemq/remote-connector=remote-artemis:add(socket-binding=remote-artemis)
 /subsystem=messaging-activemq/pooled-connection-factory=remote-artemis:add(connectors=[remote-artemis], entries=[java:/jms/remoteCF])
+/subsystem=messaging-activemq/pooled-connection-factory=remote-artemis:write-attribute(name="user", value="${amq.broker.userName}")
+/subsystem=messaging-activemq/pooled-connection-factory=remote-artemis:write-attribute(name="password", value="${amq.broker.passWord}")
+/subsystem=messaging-activemq/pooled-connection-factory=remote-artemis:write-attribute(name="enable-amq1-prefix", value="true")
 /subsystem=messaging-activemq/external-jms-queue=testQueueRemoteArtemis:add(entries=[java:/queue/testQueueRemoteArtemis])
-
-/:reload

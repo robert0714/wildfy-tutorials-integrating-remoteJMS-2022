@@ -33,6 +33,7 @@
         <version.wildfly>26.1.0.Final</version.wildfly>
         <wildfly.groupId>org.wildfly</wildfly.groupId>
         <jakartaee-api.version>8.0.0</jakartaee-api.version>
+        <version.wildfly.maven.plugin>7.0.2.Final</version.wildfly.maven.plugin> 
     </properties>
 
     <dependencies>
@@ -65,50 +66,28 @@
                 </configuration>
             </plugin>
             <plugin>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <configuration>
-                    <transitive>false</transitive>
-                    <artifactItems>
-                        <artifactItem>
-                            <groupId>org.apache.activemq</groupId>
-                            <artifactId>activemq-rar</artifactId>
-                            <version>5.16.5</version>
-                            <type>rar</type>
-                            <overWrite>true</overWrite>
-                            <outputDirectory>${project.build.directory}/</outputDirectory>
-                            <destFileName>activemq-rar-5.16.5.rar</destFileName>
-                        </artifactItem>
-                    </artifactItems>
-                </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>copy</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
                 <groupId>org.wildfly.plugins</groupId>
                 <artifactId>wildfly-jar-maven-plugin</artifactId>
+                <version>${version.wildfly.maven.plugin}</version>
                 <configuration>
-                    <feature-pack-location>wildfly@maven(org.jboss.universe:community-universe)#${version.wildfly}</feature-pack-location>
+					<feature-packs>
+						<feature-pack>
+							<location>wildfly@maven(org.jboss.universe:community-universe)#${version.wildfly}</location>
+						</feature-pack>
+					</feature-packs>                     
                     <layers>
                         <layer>elytron</layer>
-                        <layer>resource-adapters</layer>
                         <layer>ejb</layer>
+                       <!--  <layer>remote-activemq</layer> -->
                     </layers>
-                    <!---->
+                    
                     <cli-sessions>
                         <cli-session>
                             <script-files>
-                                <script>maven-deploy-amq-rar.cli</script>
+                                <script>deploy-pooled-connection-factory.cli</script>
                             </script-files>
                         </cli-session>
                     </cli-sessions>
-                    
-                    <plugin-options>
-                    </plugin-options>
                 </configuration>
                 <executions>
                     <execution>

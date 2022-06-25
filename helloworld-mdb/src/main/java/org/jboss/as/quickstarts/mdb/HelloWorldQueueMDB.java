@@ -37,8 +37,6 @@ import org.jboss.ejb3.annotation.ResourceAdapter;
         @ActivationConfigProperty(propertyName = "destinationLookup", propertyValue = "testQueueRemoteArtemis"),
         @ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Queue"),
         @ActivationConfigProperty(propertyName = "useJNDI", propertyValue = "false"),
-        @ActivationConfigProperty(propertyName="user", propertyValue="admin"),
-        @ActivationConfigProperty(propertyName="password", propertyValue="admin"),
         @ActivationConfigProperty(propertyName = "acknowledgeMode", propertyValue = "Auto-acknowledge") })
 @ResourceAdapter("remote-artemis")
 public class HelloWorldQueueMDB implements MessageListener {

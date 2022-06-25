@@ -21,6 +21,7 @@ import java.io.PrintWriter;
 
 import javax.annotation.Resource;
 import javax.inject.Inject;
+import javax.jms.ConnectionFactory;
 import javax.jms.JMSConnectionFactory;
 import javax.jms.JMSContext;
 import javax.jms.JMSPasswordCredential;
@@ -53,8 +54,11 @@ public class HelloWorldMDBServletClient extends HttpServlet {
 
     @Inject
     @JMSConnectionFactory("java:/jms/remoteCF")
-    @JMSPasswordCredential(userName = "admin", password = "admin")
     private JMSContext context;
+    
+    
+    @Resource(lookup = "java:/jms/remoteCF")
+    private ConnectionFactory cf ; 
 
     @Resource(lookup = "java:/queue/testQueueRemoteArtemis")
     private Queue queue;
@@ -68,8 +72,8 @@ public class HelloWorldMDBServletClient extends HttpServlet {
             out.write("<p>Sending messages to <em>" + queue + "</em></p>");
             out.write("<h2>The following messages will be sent to the destination:</h2>");
             for (int i = 0; i < MSG_COUNT; i++) {
-                String text = "This is message " + (i + 1);
-                context.createProducer().send(queue, text);
+                String text = "This is message " + (i + 1); 
+                getJMSContext().createProducer().send(queue, text);
                 out.write("Message (" + i + "): " + text + "</br>");
             }
             out.write("<p><i>Go to your JBoss EAP server console or server log to see the result of messages processing.</i></p>");
@@ -80,6 +84,20 @@ public class HelloWorldMDBServletClient extends HttpServlet {
         }
     }
 
+    /**
+     * Because using wildfly-jar-maven-plugin ,we discover that  injecting JMSContext would be null.<br/>
+     * we use JMS 1.1(ConnectionFactory) to get JMSContext.
+     * **/
+	protected JMSContext getJMSContext() {
+		if (this.context != null) {
+			return this.context;
+		} else if(cf!=null) {
+			return cf.createContext();
+		}else {
+			System.out.println("Both ConnectionFactory & JMSContext are null.");
+			return null;
+		}
+	}
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         doGet(req, resp);
     }

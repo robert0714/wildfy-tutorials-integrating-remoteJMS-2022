@@ -36,14 +36,14 @@ $ARTEMIS_BASE_PATH/data/mybroker/bin/artemis run
 ```
 
 
-# Install and configure WildFly:
+# Install and configure WildFly(Connect a pooled-connection-factory to a Remote Artemis Server):
 
-Download [WildFly|https://www.wildfly.org/downloads/], unzip it in `wildfly-24.0.1.Final`, and configure it as described in the [documnetation|https://docs.wildfly.org/24/Admin_Guide.html#Messaging_Connect_a_pooled-connection-factory_to_a_Remote_Artemis_Server]:
+Download [WildFly](https://www.wildfly.org/downloads/), unzip it in `wildfly-26.0.1.Final`, and configure it as described in the [documnetation|Messaging_Connect_a_pooled-connection-factory_to_a_Remote_Artemis_Server](https://docs.wildfly.org/26/Admin_Guide.html#Messaging_Connect_a_pooled-connection-factory_to_a_Remote_Artemis_Server):
 
 ```
-unzip wildfly-24.0.1.Final.zip
-# now you should have a folder named "wildfly-24.0.1.Final"
-export WILDFLY_BASE_PATH=$PWD/wildfly-24.0.1.Final
+unzip wildfly-26.0.1.Final.zip
+# now you should have a folder named "wildfly-26.0.1.Final"
+export WILDFLY_BASE_PATH=$PWD/wildfly-26.0.1.Final
 
 $WILDFLY_BASE_PATH/bin/jboss-cli.sh 
 [disconnected /] embed-server --server-config=standalone-full.xml
@@ -56,6 +56,13 @@ $WILDFLY_BASE_PATH/bin/jboss-cli.sh
 
 [standalone@embedded /] /subsystem=messaging-activemq/pooled-connection-factory=remote-artemis:add(connectors=[remote-artemis], entries=[java:/jms/remoteCF])
 {"outcome" => "success"}
+
+[standalone@embedded /] /subsystem=messaging-activemq/pooled-connection-factory=remote-artemis:write-attribute(name="user", value="quarkus")
+{"outcome" => "success"}
+
+[standalone@embedded /] /subsystem=messaging-activemq/pooled-connection-factory=remote-artemis:write-attribute(name="password", value="quarkus")
+{"outcome" => "success"}
+
 
 [standalone@embedded /] /subsystem=messaging-activemq/pooled-connection-factory=remote-artemis:write-attribute(name="enable-amq1-prefix", value="true")
 {"outcome" => "success"}
@@ -218,3 +225,21 @@ When you invoke `http://127.0.0.1:8080/helloworld-mdb/HelloWorldMDBServletClient
 * the queue (and address) `jms.queue.testQueueRemoteArtemis` is created in Artemis
 * the servlet sends messages to Artemis `jms.queue.testQueueRemoteArtemis`
 * and the MDB reads messages also from Artemis `jms.queue.testQueueRemoteArtemis`
+
+# Use wildfly-bootable jar
+
+Running from Command Line is simple; set some environment variables and use java -jar.   Example : 
+
+```shell
+java -jar target/helloworld-mdb-bootable.jar  --properties dev.properties 
+```
+	
+or
+
+```shell
+java -jar target/helloworld-mdb-bootable.jar   -Damq.broker.userName=admin  -Damq.broker.passWord=admin  -Damq.broker.port=61616 -Damq.broker.host=192.168.18.30 -Djboss.bind.address=0.0.0.0
+```
+When you invoke `http://127.0.0.1:8080/HelloWorldMDBServletClient`:
+* the queue (and address) jms.queue.testQueueRemoteArtemis is created in Artemis
+* the servlet sends messages to Artemis jms.queue.testQueueRemoteArtemis
+* and the MDB reads messages also from Artemis jms.queue.testQueueRemoteArtemis
