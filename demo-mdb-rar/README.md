@@ -37,7 +37,8 @@ will build everything; the resulting JAR is directly runnable.   Create or edit 
 Running from Command Line is simple; set some environment variables and use java -jar.   Example : 
 
 ```shell
-	 java -jar target/demo-mdb-bootable.jar  --properties src/main/resources/Leopard.dev.properties 
+	 java -jar target/demo-mdb-bootable.jar  --properties src/main/resources/Leopard.dev.properties
+	 java -jar target/demo-mdb-bootable.jar  --properties src/main/resources/amqp.dev.properties
 ```
 	
 ```

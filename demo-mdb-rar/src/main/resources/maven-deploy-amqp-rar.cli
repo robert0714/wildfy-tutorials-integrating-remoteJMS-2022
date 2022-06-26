@@ -1,0 +1,15 @@
+deploy --name=AMQP-RAR --runtime-name=resource-adapter.rar target/resource-adapter-1.0.2.rar
+/subsystem=resource-adapters/resource-adapter=AMQPBroker:add(archive=resource-adapter.rar,transaction-support=NoTransaction) 
+/subsystem=resource-adapters/resource-adapter=AMQPBroker/connection-definitions=amqCF/:add(class-name="org.jboss.resource.adapter.jms.JmsManagedConnectionFactory", jndi-name="java:/jms/amqCF", elytron-enabled=true,recovery-elytron-enabled=true)
+ 
+
+/subsystem=resource-adapters/resource-adapter=AMQPBroker/connection-definitions=amqCF/config-properties=UserName/:add(value="${amq.broker.userName}")
+/subsystem=resource-adapters/resource-adapter=AMQPBroker/connection-definitions=amqCF/config-properties=Password/:add(value="${amq.broker.passWord}")
+/subsystem=resource-adapters/resource-adapter=AMQPBroker/connection-definitions=amqCF/config-properties=ConnectionFactory/:add(value="amqCF")
+/subsystem=resource-adapters/resource-adapter=AMQPBroker/connection-definitions=amqCF/config-properties=JndiParameters/:add(value="java.naming.factory.initial=org.apache.qpid.jms.jndi.JmsInitialContextFactory;java.naming.provider.url=${amq.broker.url}")
+
+
+/subsystem=ejb3:write-attribute(name=default-resource-adapter-name, value=AMQPBroker)
+
+#/subsystem=resource-adapters/resource-adapter=AMQPBroker/admin-objects="queue/amqpMDBTestQueue":add(class-name="org.apache.activemq.command.ActiveMQQueue", jndi-name="java:/queue/amqpMDBTestQueuee", use-java-context=true)
+#/subsystem=resource-adapters/resource-adapter=AMQPBroker/admin-objects="queue/amqpMDBTestQueue"/config-properties=PhysicalName:add(value="queue/amqpMDBTestQueue")

@@ -1,0 +1,21 @@
+deploy --name=AMQP-RAR --runtime-name=qpid-ra-6.1.7.rar target/qpid-ra-6.1.7.rar
+/subsystem=resource-adapters/resource-adapter=AMQPBroker:add(archive=qpid-ra-6.1.7.rar,transaction-support=LocalTransaction) 
+/subsystem=resource-adapters/resource-adapter=AMQPBroker/connection-definitions=QpidJMSXA/:add(class-name="org.apache.qpid.ra.QpidRAManagedConnectionFactory", jndi-name="java:/jms/QpidJMSXA", elytron-enabled=true,recovery-elytron-enabled=true)
+ 
+/subsystem=resource-adapters/resource-adapter=AMQPBroker/config-properties=ConnectionURL/:add(value="amqp://${amq.broker.userName}:${amq.broker.passWord}@/?brokerlist='${amq.broker.host}:5672'")
+/subsystem=resource-adapters/resource-adapter=AMQPBroker/config-properties=TransactionManagerLocatorClass/:add(value="org.apache.qpid.ra.tm.JBoss7TransactionManagerLocator")
+/subsystem=resource-adapters/resource-adapter=AMQPBroker/config-properties=TransactionManagerLocatorMethod/:add(value="getTm")
+ 
+/subsystem=resource-adapters/resource-adapter=AMQPBroker/connection-definitions=QpidJMSXA/config-properties=ConnectionURL/:add(value="amqp://${amq.broker.userName}:${amq.broker.passWord}@/?brokerlist='${amq.broker.host}:5672'")
+/subsystem=resource-adapters/resource-adapter=AMQPBroker/connection-definitions=QpidJMSXA/config-properties=SessionDefaultType/:add(value="javax.jms.Queue")
+
+
+/subsystem=ejb3:write-attribute(name=default-resource-adapter-name, value=AMQPBroker)
+
+/subsystem=resource-adapters/resource-adapter=AMQPBroker/admin-objects="queue/amqpMDBTestQueue":add(class-name="org.apache.qpid.ra.admin.QpidQueueImpl", jndi-name="java:/queue/amqpMDBTestQueuee", use-java-context=true)
+/subsystem=resource-adapters/resource-adapter=AMQPBroker/admin-objects="queue/amqpMDBTestQueue"/config-properties=DestinationAddress:add(value="BURL:direct://javamagazine//jmagQueue1?routingkey='info1'")
+#/subsystem=resource-adapters/resource-adapter=AMQBroker/admin-objects="queue/amqpMDBTestQueue"/config-properties=PhysicalName:add(value="queue/simpleMDBTestQueue")
+
+
+/subsystem=resource-adapters/resource-adapter=AMQPBroker/admin-objects="queue/example/requests":add(class-name="org.apache.qpid.ra.admin.QpidQueueImpl", jndi-name="java:/queue/example/requests", use-java-context=true)
+/subsystem=resource-adapters/resource-adapter=AMQPBroker/admin-objects="queue/example/requests"/config-properties=DestinationAddress:add(value="BURL:direct://javamagazine//jmagQueue1?routingkey='info1'")

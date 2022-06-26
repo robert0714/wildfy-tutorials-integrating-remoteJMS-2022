@@ -18,16 +18,130 @@
 		<version.failsafe.plugin>2.22.2</version.failsafe.plugin>
 		<endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
 
-        <!-- <version.wildfly.maven.plugin>7.0.2.Final</version.wildfly.maven.plugin> -->
-
         <!-- Define the version of the JBoss BOMs we want to import to specify tested stacks. -->
         <version.jboss.bom>26.1.0.Final</version.jboss.bom>
         <version.wildfly>26.1.0.Final</version.wildfly>
         <wildfly.groupId>org.wildfly</wildfly.groupId>
         <jakartaee-api.version>8.0.0</jakartaee-api.version>
-        <version.wildfly.maven.plugin>7.0.2.Final</version.wildfly.maven.plugin> 
+        <version.wildfly.maven.plugin>7.0.2.Final</version.wildfly.maven.plugin>
+        <maven.repository.protocol>https</maven.repository.protocol>
+        <!-- The full remote maven repo URL; can be overridden via -D for special use cases -->
+        <maven.repository.url>${maven.repository.protocol}://repository.jboss.org/nexus/content/groups/public/</maven.repository.url>
+        <rar-cli>maven-deploy-amq-rar.cli</rar-cli>
     </properties>
-
+	<repositories>
+	    <repository>
+			<id>maven-public-repository-group</id>
+			<name>Central Repository</name>
+			<url>https://repo1.maven.org/maven2/</url>
+			<layout>default</layout>
+			<releases>
+				<enabled>true</enabled>
+				<updatePolicy>never</updatePolicy>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+				<updatePolicy>never</updatePolicy>
+			</snapshots>
+		</repository>
+		<repository>
+			<releases>
+				<enabled>true</enabled>
+				<updatePolicy>never</updatePolicy>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+				<updatePolicy>never</updatePolicy>
+			</snapshots>
+			<id>jboss-public-repository-group</id>
+			<name>JBoss Public Repository Group</name>
+			<url>${maven.repository.url}</url>
+			<layout>default</layout>
+		</repository>
+		<repository>
+			<id>redhat-maven-ga-group</id>
+			<name>Redhat GA Public Maven Repository Group</name>
+			<url>https://maven.repository.redhat.com/ga/
+	            </url>
+			<layout>default</layout>
+			<releases>
+				<enabled>true</enabled>
+				<updatePolicy>never</updatePolicy>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+				<updatePolicy>never</updatePolicy>
+			</snapshots>
+		</repository>
+		<!-- Remove below repo after opensaml 4.2.0 is accessible from maven central 
+			repo -->
+		<repository>
+			<id>opensaml-repo</id>
+			<name>opensaml</name>
+			<url>https://build.shibboleth.net/nexus/content/groups/public</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+		</repository>
+		<repository>
+			<id>redhat-all-public-repository-group</id>
+			<name>Redhat All Public Maven Repository Group</name>
+			<url>http://maven.repository.redhat.com/techpreview/all/
+	            </url>
+			<layout>default</layout>
+			<releases>
+				<enabled>true</enabled>
+				<updatePolicy>never</updatePolicy>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+				<updatePolicy>never</updatePolicy>
+			</snapshots>
+		</repository>
+		<repository>
+			<id>redhat-early-public-repository-group</id>
+			<name>Redhat Early Public Maven Repository Group</name>
+			<url>https://maven.repository.redhat.com/nexus/content/groups/product-earlyaccess/
+	            </url>
+			<layout>default</layout>
+			<releases>
+				<enabled>true</enabled>
+				<updatePolicy>never</updatePolicy>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+				<updatePolicy>never</updatePolicy>
+			</snapshots>
+		</repository>
+		
+	</repositories>
+	<pluginRepositories>
+	    <pluginRepository>
+			<id>maven-public-repository-group</id>
+			<name>Central Repository</name>
+			<url>https://repo1.maven.org/maven2/</url>
+			<layout>default</layout>
+			<releases>
+				<enabled>true</enabled>
+				<updatePolicy>never</updatePolicy>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+				<updatePolicy>never</updatePolicy>
+			</snapshots>
+		</pluginRepository>
+		<pluginRepository>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+			<id>jboss-public-repository-group</id>
+			<name>JBoss Public Repository Group</name>
+			<url>${maven.repository.url}</url>
+		</pluginRepository>
+	</pluginRepositories>
     <dependencies>
         <dependency>
             <groupId>jakarta.platform</groupId>
@@ -70,6 +184,27 @@
                             <outputDirectory>${project.build.directory}/</outputDirectory>
                             <destFileName>activemq-rar-5.16.5.rar</destFileName>
                         </artifactItem>
+                        <!-- JMS3
+                        <artifactItem>                        	
+                            <groupId>org.apache.activemq</groupId>
+                            <artifactId>artemis-jakarta-rar</artifactId>
+                            <version>2.19.1</version>
+                            <type>rar</type>
+                            <overWrite>true</overWrite>
+                            <outputDirectory>${project.build.directory}/</outputDirectory>
+                            <destFileName>artemis-jakarta-rar-2.19.1.rar</destFileName>
+                        </artifactItem>
+                         -->
+                         <!-- https://github.com/amqphub/amqp-10-resource-adapter/tree/main/wildfly-example -->
+                         <artifactItem>                        	
+                            <groupId>org.amqphub.jca</groupId>
+  							<artifactId>resource-adapter</artifactId>
+                            <version>1.0.2</version>
+                            <type>rar</type>
+                            <overWrite>true</overWrite>
+                            <outputDirectory>${project.build.directory}/</outputDirectory>
+                            <destFileName>resource-adapter-1.0.2.rar</destFileName>
+                        </artifactItem>
                     </artifactItems>
                 </configuration>
                 <executions>
@@ -97,7 +232,7 @@
                     <cli-sessions>
                         <cli-session>
                             <script-files>
-                                <script>src/main/resources/maven-deploy-amq-rar.cli</script>
+                                <script>src/main/resources/${rar-cli}</script>
                             </script-files>
                         </cli-session>
                     </cli-sessions>
@@ -123,4 +258,19 @@
             </dependency>            
         </dependencies>
     </dependencyManagement>
+    <profiles>
+    	<profile>
+    	   <!-- JMS3 -->
+    		<id>artemis</id>
+    		<properties>
+    			<rar-cli>maven-deploy-artemis-rar.cli</rar-cli>
+    		</properties>
+    	</profile>
+    	<profile>
+    		<id>amqp</id>
+    		<properties>
+    			<rar-cli>maven-deploy-amqp-rar.cli</rar-cli>
+    		</properties>
+    	</profile>
+    </profiles>
 </project>
