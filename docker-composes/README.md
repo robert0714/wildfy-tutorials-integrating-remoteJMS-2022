@@ -153,7 +153,6 @@ After creating ingresses we would have to add the following line in ``/etc/hosts
 ```
 Now, we access the management console, for example for the third broker under the following URL http://one.activemq.com/console.
 
-
 Once the broker is ready, we may define a test queue. The name of that queue is test-1.
 ```
 apiVersion: broker.amq.io/v1beta1
@@ -164,4 +163,25 @@ spec:
   addressName: address-1
   queueName: test-1
   routingType: anycast
+```
+
+The first way to distribute the connections is through the dedicated Kubernetes Service. We don’t have to leverage the services created automatically by the operator. We can create our own Service that load balances between all available pods with brokers.
+
+slb.yaml
+```yaml
+kind: Service
+apiVersion: v1
+metadata:
+  name: ex-aao-lb
+spec:
+  ports:
+    - name: amqp
+      protocol: TCP
+      port: 5672
+    - name: all-acceptors
+      protocol: TCP
+      port: 61616
+  type: ClusterIP
+  selector:
+    application: ex-aao-app
 ```
