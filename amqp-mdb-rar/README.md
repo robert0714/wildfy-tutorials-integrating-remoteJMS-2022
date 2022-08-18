@@ -42,10 +42,10 @@ $ mvn install
 1. [Build the code.](#building-the-code)
 
 1. Copy the `resource-adapter/target/resource-adapter-<version>.rar`
-   and `wildfly-example/target/wildfly-example-<version>.war` files to
+   and `amqp-mdb-rar/target/amqp-mdb-rar.war` files to
    the WildFly `standalone/deployments` directory.
 
-1. Copy the `wildfly-example/standalone-custom.xml` file to the
+1. Copy the `amqp-mdb-rar/standalone-custom.xml` file to the
    WildFly `standalone/configuration` directory.
 
 1. In a separate terminal window, start an AMQP 1.0 server wint user
@@ -61,14 +61,14 @@ $ mvn install
 1. Use `curl` to send text to the `send-request` endpoint.
 
     ```sh
-    $ curl -fX POST http://localhost:8080/wildfly-example/api/send-request -H "content-type: text/plain" -d "hellooo"
+    $ curl -fX POST http://localhost:8080/amqp-mdb-rar/api/send-request -H "content-type: text/plain" -d "hellooo"
     ID:4a63adc0-547c-4881-bc3e-3c8eb7007648:2:1:1-1
     ```
 
 1. Use `curl` again to get the response from the `receive-response` endpoint.
 
     ```sh
-    $ curl -fX POST http://localhost:8080/wildfly-example/api/receive-response
+    $ curl -fX POST http://localhost:8080/amqp-mdb-rar/api/receive-response
     ID:4a63adc0-547c-4881-bc3e-3c8eb7007648:2:1:1-1: HELLOOO
     ```
 

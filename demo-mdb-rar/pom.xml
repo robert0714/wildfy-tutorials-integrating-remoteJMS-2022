@@ -194,6 +194,15 @@
                             <outputDirectory>${project.build.directory}/</outputDirectory>
                             <destFileName>artemis-jakarta-rar-2.19.1.rar</destFileName>
                         </artifactItem>
+                        <artifactItem>      
+						    <groupId>org.apache.activemq.examples.modules</groupId>
+						    <artifactId>artemis-rar</artifactId> 
+                            <version>2.19.1</version>
+                            <type>rar</type>
+                            <overWrite>true</overWrite>
+                            <outputDirectory>${project.build.directory}/</outputDirectory>
+                            <destFileName>artemis-ra-2.19.1.rar</destFileName>
+                        </artifactItem>
                          -->
                          <!-- https://github.com/amqphub/amqp-10-resource-adapter/tree/main/wildfly-example -->
                          <artifactItem>                        	
