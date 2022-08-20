@@ -57,6 +57,8 @@ spec:
   console: # (3)
     expose: true
 ```
+ps. You can refer the [official document](https://github.com/artemiscloud/activemq-artemis-operator/blob/main/docs/getting-started/quick-start.md#draining-messages-on-scale-down).
+
 Once the ``ActiveMQArtemis`` is created, and the operator starts the deployment process. It creates the ``StatefulSet`` object:`
 ```shell
 $ kubectl get statefulset
