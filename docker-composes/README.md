@@ -196,5 +196,6 @@ spec:
   *  AMQP: [Getting started with JMS and ActiveMQ on Kubernetes](https://github.com/ssorj/hello-world-jms-kubernetes)
      * [DevNation talk video](https://www.youtube.com/watch?v=mkqVxWZfGfI)
      * [DevNation talk slides](https://docs.google.com/presentation/d/1kOsWwLcJWZGoCF8O_NPUB0jkAre9LMhE2VETnafxcMw/edit?usp=sharing)
+     * [Igor Brodewicz's Tech Blog - Running ActiveMQ Artemis on Kubernetes step-by-step ](https://brodewicz.tech/2020/05/running-activemq-artemis-on-kubernetes-step-by-step)
    
   
