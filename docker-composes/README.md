@@ -187,3 +187,9 @@ spec:
   selector:
     application: ex-aao-app
 ```
+# Related Referemce
+* ActiveMQ Artemis Operator
+  *  [Community Documentation](https://artemiscloud.io/docs/tutorials/using_operator/)
+  *  [Redhat Documentation - Chapter 4. Configuring Operator-based broker deployments](https://access.redhat.com/documentation/en-us/red_hat_amq/2020.q4/html-single/deploying_amq_broker_on_openshift/index#assembly-br-configuring-operator-based-deployments_broker-ocp)
+* Use cases: [ActiveMQ Artemis with Spring Boot on Kubernetes](https://piotrminkowski.com/2022/07/26/activemq-artemis-with-spring-boot-on-kubernetes/)
+  
