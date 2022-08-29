@@ -191,12 +191,15 @@ spec:
 * ActiveMQ Artemis Operator
   *  [Community Documentation](https://artemiscloud.io/docs/tutorials/using_operator/)
      * [Using JMS or Jakarta Messaging](https://activemq.apache.org/components/artemis/documentation/latest/using-jms.html)
+     * [Resource Limits](https://activemq.apache.org/components/artemis/documentation/latest/resource-limits.html)
+       * see broker.xml ( `/home/jboss/amq-broker/etc/broker.xml`)
   *  [Redhat Documentation - Chapter 4. Configuring Operator-based broker deployments](https://access.redhat.com/documentation/en-us/red_hat_amq/2020.q4/html-single/deploying_amq_broker_on_openshift/index#assembly-br-configuring-operator-based-deployments_broker-ocp)
+     * [Configuring broker resource limits and requests](https://access.redhat.com/documentation/en-us/red_hat_amq/2020.q4/html/deploying_amq_broker_on_openshift/assembly-br-configuring-operator-based-deployments_broker-ocp#proc-br-configuring-broker-limits-and-requests_broker-ocp)
 * Use cases: 
   *  AMQP: [ActiveMQ Artemis with Spring Boot on Kubernetes](https://piotrminkowski.com/2022/07/26/activemq-artemis-with-spring-boot-on-kubernetes/)
   *  AMQP: [Getting started with JMS and ActiveMQ on Kubernetes](https://github.com/ssorj/hello-world-jms-kubernetes)
      * [DevNation talk video](https://www.youtube.com/watch?v=mkqVxWZfGfI)
      * [DevNation talk slides](https://docs.google.com/presentation/d/1kOsWwLcJWZGoCF8O_NPUB0jkAre9LMhE2VETnafxcMw/edit?usp=sharing)
      * [Igor Brodewicz's Tech Blog - Running ActiveMQ Artemis on Kubernetes step-by-step ](https://brodewicz.tech/2020/05/running-activemq-artemis-on-kubernetes-step-by-step)
-   
+
   
