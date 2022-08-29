@@ -57,6 +57,75 @@ spec:
   console: # (3)
     expose: true
 ```
+if it worked , you can check it .
+```shell
+$ kubectl    get crd activemqartemises.broker.amq.io
+NAME                              CREATED AT
+activemqartemises.broker.amq.io   2022-08-18T08:30:24Z
+
+$ kubectl  get crd activemqartemises.broker.amq.io
+NAME                              CREATED AT
+activemqartemises.broker.amq.io   2022-08-18T08:30:24Z
+
+$ kubectl  get  activemqartemises.broker.amq.io
+NAME     AGE
+ex-aao   10d
+
+$ kubectl  get  activemqartemises
+NAME     AGE
+ex-aao   10d
+
+$ kubectl  -n d210641 edit  activemqartemises ex-aao
+
+ ``` 
+ 
+ **⚠ resource limit for queue? :** [Official Examples](https://github.com/artemiscloud/activemq-artemis-operator/blob/main/examples/artemis-merge-replace-address-settings-deployment.yaml)    
+
+```yaml
+apiVersion: broker.amq.io/v1beta1
+kind: ActiveMQArtemis
+metadata:
+  name: ex-aao
+spec:
+  deploymentPlan:
+    size: 3 # (1)
+    image: placeholder
+    messageMigration: true
+    resources:
+      limits:
+        cpu: "500m"
+        memory: "1024Mi"
+      requests:
+        cpu: "250m"
+        memory: "512Mi"
+  acceptors: # (2)
+    - name: amqp
+      protocols: amqp
+      port: 5672
+      connectionsAllowed: 5
+    - name: all-acceptors
+      protocols: all
+      port: 61616
+      connectionsAllowed: 100
+  console: # (3)
+    expose: true
+  addressSettings: # (4)
+    applyRule: merge_replace
+    addressSetting:
+      - match: "#"
+        deadLetterAddress: DLQ
+      - match: "abc#"
+        deadLetterAddress: DLQABC
+        defaultConsumerWindowSize: 2048000
+        maxSizeBytes: "10m"
+      - match: "jms"
+        deadLetterAddress: jmsdlq
+
+```
+ 
+
+
+
 ps. You can refer the [official document](https://github.com/artemiscloud/activemq-artemis-operator/blob/main/docs/getting-started/quick-start.md#draining-messages-on-scale-down).
 
 Once the ``ActiveMQArtemis`` is created, and the operator starts the deployment process. It creates the ``StatefulSet`` object:`
@@ -192,7 +261,7 @@ spec:
   *  [Community Documentation](https://artemiscloud.io/docs/tutorials/using_operator/)
      * [Using JMS or Jakarta Messaging](https://activemq.apache.org/components/artemis/documentation/latest/using-jms.html)
      * [Resource Limits](https://activemq.apache.org/components/artemis/documentation/latest/resource-limits.html)
-       * see broker.xml ( `/home/jboss/amq-broker/etc/broker.xml`)
+       * see broker.xml - [`/home/jboss/amq-broker/etc/broker.xml`](https://github.com/apache/activemq-artemis/blob/main/docs/user-manual/en/configuration-index.md)
   *  [Redhat Documentation - Chapter 4. Configuring Operator-based broker deployments](https://access.redhat.com/documentation/en-us/red_hat_amq/2020.q4/html-single/deploying_amq_broker_on_openshift/index#assembly-br-configuring-operator-based-deployments_broker-ocp)
      * [Configuring broker resource limits and requests](https://access.redhat.com/documentation/en-us/red_hat_amq/2020.q4/html/deploying_amq_broker_on_openshift/assembly-br-configuring-operator-based-deployments_broker-ocp#proc-br-configuring-broker-limits-and-requests_broker-ocp)
 * Use cases: 
