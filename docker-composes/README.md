@@ -34,6 +34,9 @@ kind: ActiveMQArtemis
 metadata:
   name: ex-aao
 spec:
+  env:
+    - name: TZ
+      value: 'Asia/Taipei'
   deploymentPlan:
     size: 3 # (1)
     image: placeholder
@@ -87,6 +90,9 @@ kind: ActiveMQArtemis
 metadata:
   name: ex-aao
 spec:
+  env:
+    - name: TZ
+      value: 'Asia/Taipei'
   deploymentPlan:
     size: 3 # (1)
     image: placeholder
